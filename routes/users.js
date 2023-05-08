@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const {User, validate} = require('../models/user');
+const _ = require('lodash');
 
 router.post('/', async (req, res)=>{
 	const {error} = validate(req.body);
@@ -11,15 +12,15 @@ router.post('/', async (req, res)=>{
 	if (user) 
 		res.status(400).send("Mavjud bo`lgan foydalanuvchi");
 
-	user = new User({
-		name: req.body.name, 
-		password: req.body.password,
-		email: req.body.email
-	});
-
+	user = new User(_.pick(req.body, ['name', 'email', 'password']));
 	user = await user.save();
 
-	res.send(user);
+	//classic way of hiding passwrod from client side
+	// const {name, email} = user;
+	// res.send({name, email});
+
+	res.send(_.pick(user, ['_id', 'name', 'email']));
+	console.log('user saved to data');
 });
 
 module.exports = router;
