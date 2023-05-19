@@ -24,6 +24,7 @@ router.get('/:Id', async (req,res)=>{
 });
 
 router.post('/', async (req,res)=>{
+	try{
 	const {error} = validate(req.body);
 	if(error)
 		res.status(400).send(error.details[0].message);
@@ -57,6 +58,9 @@ router.post('/', async (req,res)=>{
 
 	console.log('new enrollment saved!');
 	res.send(enrollment);
+} catch(err){
+	res.status(500).send("server error");
+}
 });
 
 module.exports = router;

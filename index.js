@@ -17,7 +17,7 @@ app.use('/api/customers', customersRoute);
 app.use('/api/courses', coursesRoute);
 app.use('/api/enrollments', enrollmentsRoute);
 app.use('/api/users', usersRoute);
-app.use('api/auth', authRoute);
+app.use('/api/auth', authRoute);
 
 const urlToDatabase = "mongodb://127.0.0.1:27017/test";
 mongoose.connect(urlToDatabase, {useNewUrlParser:true, useUnifiedTopology:true})
