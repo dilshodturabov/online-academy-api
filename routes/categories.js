@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const {Category, validate} = require('../models/category');
+const auth = require('../middleware/auth'); 
 
 const ERROR_MESSAGE = 'Berilgan IDga teng bo`lgan kategoriya topilmadi!'
 
@@ -11,7 +12,10 @@ router.get('/', async (req,res)=>{
     res.send(category);
 });
 
-router.post('/', async (req,res)=>{
+router.post('/', auth, async (req,res)=>{
+
+
+
     const {error} = validate(req.body);
     if (error) {
         return res.status(400).send(error.details[0].message);
@@ -33,7 +37,7 @@ router.get('/:Id', async (req, res)=>{
 });
 
 
-router.put('/:Id', async (req,res)=>{
+router.put('/:Id', auth, async (req,res)=>{
     const {error} = validate(req.body);
     if (error) {
         return res.status(400).send(error.details[0].message);

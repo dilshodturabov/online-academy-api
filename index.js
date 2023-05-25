@@ -7,8 +7,12 @@ const enrollmentsRoute = require('./routes/enrollments');
 const usersRoute = require('./routes/users');
 const authRoute = require('./routes/auth');
 const mongoose = require('mongoose');
+const config = require('config');
 
-// mongoose.set('useFindAndModify', false);
+if(!config.get('jwtPrivateKey')){
+    console.error('CRITICAL ERROR: onLess_jwtPrivateKey variable key undefined');
+    process.exit(1);
+}
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));

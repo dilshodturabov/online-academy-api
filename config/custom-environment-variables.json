@@ -1,5 +1,3 @@
 {
-    "mailserver": {
-        "password":"app-password"
-    }
+	"jwtPrivateKey": "restfullapp_jwtPrivateKey"
 }

@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const Joi = require('joi');
-const jwt = require('jsonwebtoken');
+
 
 router.post('/', async (req, res) => {
     const { error } = validate(req.body);
@@ -19,7 +19,7 @@ router.post('/', async (req, res) => {
         return res.status(400).send('Email yoki parol noto\'g\'ri'); 
     });
 
-    const token = jwt.sign({_id: user.id}, '8uMen1ngMaxfIyK@lit!m')
+    const token = user.generateToken();
 
     return res.header('x-auth-token', token).send(true);
 });
