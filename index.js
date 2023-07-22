@@ -10,7 +10,7 @@ const mongoose = require('mongoose');
 const config = require('config');
 
 if(!config.get('jwtPrivateKey')){
-    console.error('CRITICAL ERROR: onLess_jwtPrivateKey variable key undefined');
+    console.error('CRITICAL ERROR: restfullapp_jwtPrivateKey environment variable undefined');
     process.exit(1);
 }
 

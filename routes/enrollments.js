@@ -1,4 +1,4 @@
-const express = require('express');
+ const express = require('express');
 const router = express.Router();
 const {Enrollment, validate} = require('../models/enrollment');
 const {Customer} = require('../models/customer');
@@ -34,7 +34,7 @@ router.post('/', async (req,res)=>{
 		res.status(404).send(ERROR_MESSAGE_CUSTOMER);
 
 	const course = await Course.findById(req.body.courseId);
-	if(!Course)
+	if(!course)
 		res.status(404).send(ERROR_MESSAGE_COURSE);
 
 	let enrollment = new Enrollment({
