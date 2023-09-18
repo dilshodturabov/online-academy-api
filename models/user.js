@@ -22,11 +22,12 @@ const userSchema = new mongoose.Schema({
 		minlength: 5,
 		maxlength: 250,	
 		unique: true
-	}
+	},
+	isAdmin: Boolean
 });
 
-userSchema.methods.generateToken = function(){
-	 	const token = jwt.sign({_id: this.id}, config.get('jwtPrivateKey'));
+userSchema.methods.generateAuthToken = function(){
+	 	const token = jwt.sign({_id: this.id, isAdmin: this.isAdmin}, config.get('jwtPrivateKey'));
 	 	return token;
 }
 
@@ -36,7 +37,8 @@ function validateUser(user){
 	const userSchema = Joi.object({
 		name: Joi.string().min(3).max(50).required(),
 		password: Joi.string().min(3).max(50).required(),
-    	email: Joi.string().email().required()
+    	email: Joi.string().email().required(),
+		isAdmin: Joi.boolean().required()
 	})
 
 	return userSchema.validate(user);

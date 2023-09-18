@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const {Customer, validate} = require('../models/customer');
+const auth = require('../middleware/auth');
 
 const ERROR_MESSAGE = "Berilgan IDga teng bo`lgan mijoz topilmadi!";
 
@@ -11,7 +12,7 @@ router.get('/', async (req,res)=>{
     res.send(customer);
 });
 
-router.post('/', async (req,res)=>{
+router.post('/', auth, async (req,res)=>{
     const {error} = validate(req.body);
     if (error) {
         return res.status(400).send(error.details[0].message);
@@ -26,7 +27,7 @@ router.post('/', async (req,res)=>{
     customer = await customer.save();
 
     console.log("created customer ", customer);
-    res.status(201).send(customer);
+    return res.status(201).send(customer);
 });
 
 router.get('/:Id', async (req, res)=>{
@@ -34,10 +35,10 @@ router.get('/:Id', async (req, res)=>{
     if(!customer)
         return res.status(404).send(ERROR_MESSAGE);
 
-    res.send(customer);
+    return res.send(customer);
 });
 
-router.put('/:Id', async (req,res)=>{
+router.put('/:Id', auth, async (req,res)=>{
     const {error} = validate(req.body);
     if(error)
         res.status(400).send(error.details[0].message);
@@ -53,16 +54,16 @@ router.put('/:Id', async (req,res)=>{
         res.status(404).send(ERROR_MESSAGE);
 
     console.log('updated customer ',customer);
-    res.send(customer);
+    return res.send(customer);
 });
 
-router.delete('/:Id', async (req,res)=>{
+router.delete('/:Id', auth, async (req,res)=>{
     const customer = await Customer.findByIdAndRemove(req.params.Id);
     if(!customer)
         res.status(404).send(ERROR_MESSAGE);
 
     console.log("deleted customer ",customer);
-    res.send(customer);
+    return res.send(customer);
 });
 
 module.exports = router;

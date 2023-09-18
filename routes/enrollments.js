@@ -1,8 +1,9 @@
- const express = require('express');
+const express = require('express');
 const router = express.Router();
 const {Enrollment, validate} = require('../models/enrollment');
 const {Customer} = require('../models/customer');
 const {Course} =require('../models/course');
+const auth = require('../middleware/auth');
 
 const ERROR_MESSAGE = "Berilgan IDga teng bo`lgan enrollment topilmadi!";
 const ERROR_MESSAGE_CUSTOMER = "Berilgan IDga teng bo`lgan mijoz topilmadi!";
@@ -12,7 +13,7 @@ const ERROR_MESSAGE_COURSE = "Berilgan IDga teng bo`lgan kategoriya topilmadi!";
 
 router.get('/', async (req,res)=>{
 	const enrollment = await Enrollment.find().sort('-dateStart');
-	res.send(enrollment);
+	return res.send(enrollment);
 });
 
 router.get('/:Id', async (req,res)=>{
@@ -20,10 +21,10 @@ router.get('/:Id', async (req,res)=>{
 	if(!enrollment)
 		res.status(404).send(ERROR_MESSAGE);
 
-	res.send(enrollment);
+	return res.send(enrollment);
 });
 
-router.post('/', async (req,res)=>{
+router.post('/', auth, async (req,res)=>{
 	try{
 	const {error} = validate(req.body);
 	if(error)
@@ -57,9 +58,9 @@ router.post('/', async (req,res)=>{
 	customer.save();
 
 	console.log('new enrollment saved!');
-	res.send(enrollment);
+	return res.send(enrollment);
 } catch(err){
-	res.status(500).send("server error");
+	return res.status(500).send("server error");
 }
 });
 

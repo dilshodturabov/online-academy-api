@@ -26,7 +26,7 @@ const customerSchema = new mongoose.Schema({
 
 const Customer = mongoose.model('Customer', customerSchema);
 
-function validateCustomer(category){
+function validateCustomer(customer){
     const customerSchema = Joi.object({
         name: Joi.string().min(3).max(50).required(),
         phone: Joi.string().min(5).max(50).required(),
@@ -34,7 +34,7 @@ function validateCustomer(category){
         bonusPoint: Joi.number()
     });
 
-    return customerSchema.validate(category);
+    return customerSchema.validate(customer);
 }
 
 exports.Customer = Customer;

@@ -1,3 +1,4 @@
+require('express-async-errors');
 const express = require('express');
 const app = express();
 const categoriesRoute = require('./routes/categories');
@@ -8,9 +9,11 @@ const usersRoute = require('./routes/users');
 const authRoute = require('./routes/auth');
 const mongoose = require('mongoose');
 const config = require('config');
+const winston = require('winston');
 
+winston.add(winston.transports.File, {filename: 'restfullapp-logs.log'});
 if(!config.get('jwtPrivateKey')){
-    console.error('CRITICAL ERROR: restfullapp_jwtPrivateKey environment variable undefined');
+    console.error('CRITICAL ERROR: restfullapp_jwtPrivateKey environment variable is undefined!');
     process.exit(1);
 }
 
@@ -22,7 +25,10 @@ app.use('/api/courses', coursesRoute);
 app.use('/api/enrollments', enrollmentsRoute);
 app.use('/api/users', usersRoute);
 app.use('/api/auth', authRoute);
-
+app.use(function(err, req, res, next){
+    winston.log('')
+    res.status(500).send('Serverda kutilmagan xato yuz berdi!');
+})
 const urlToDatabase = "mongodb://127.0.0.1:27017/test";
 mongoose.connect(urlToDatabase, {useNewUrlParser:true, useUnifiedTopology:true})
     .then(()=> console.log('database connected...'))
