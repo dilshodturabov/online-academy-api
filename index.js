@@ -7,11 +7,12 @@ const coursesRoute = require('./routes/courses');
 const enrollmentsRoute = require('./routes/enrollments');
 const usersRoute = require('./routes/users');
 const authRoute = require('./routes/auth');
+const errorMiddleware = require('./middleware/error');
 const mongoose = require('mongoose');
 const config = require('config');
 const winston = require('winston');
 
-winston.add(winston.transports.File, {filename: 'restfullapp-logs.log'});
+winston.add(new winston.transports.File({filename: 'restfullapp-logs.log'}));
 if(!config.get('jwtPrivateKey')){
     console.error('CRITICAL ERROR: restfullapp_jwtPrivateKey environment variable is undefined!');
     process.exit(1);
@@ -25,10 +26,7 @@ app.use('/api/courses', coursesRoute);
 app.use('/api/enrollments', enrollmentsRoute);
 app.use('/api/users', usersRoute);
 app.use('/api/auth', authRoute);
-app.use(function(err, req, res, next){
-    winston.log('')
-    res.status(500).send('Serverda kutilmagan xato yuz berdi!');
-})
+app.use(errorMiddleware);
 const urlToDatabase = "mongodb://127.0.0.1:27017/test";
 mongoose.connect(urlToDatabase, {useNewUrlParser:true, useUnifiedTopology:true})
     .then(()=> console.log('database connected...'))
