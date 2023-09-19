@@ -13,10 +13,23 @@ const config = require('config');
 const winston = require('winston');
 require('winston-mongodb');
 
-
 winston.add(new winston.transports.Console());
-winston.add(new winston.transports.File({ filename: 'logs/rf-logs.log' }));
-winston.add(new winston.transports.MongoDB({ db: 'mongodb://127.0.0.1:27017/test-logs' }));
+winston.add(new winston.transports.File({ filename: 'logs/rf-logs.log', level: 'info'}));
+winston.add(new winston.transports.MongoDB({ db: 'mongodb://127.0.0.1:27017/test-logs', level: 'info'}));
+
+process.on('uncaughtException', ex =>{
+    winston.error(ex.message, ex);
+    process.exit(1);
+});
+
+process.on('unhandledRejection', ex=>{
+    winston.error('unhandledRejection xatosi', ex.message, ex);
+    process.exit(1);
+})
+
+const myPromise = Promise.reject('yana boshqa kutilmagan xato!').then('bitdi!');
+
+throw new Error('Kutilmagan xato!');
 
 
 
@@ -35,16 +48,12 @@ app.use('/api/users', usersRoute);
 app.use('/api/auth', authRoute);
 app.use(errorMiddleware);
 
-
 const urlToDatabase = "mongodb://127.0.0.1:27017/test";
 mongoose.connect(urlToDatabase, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => winston.debug('database connected...'))
     .catch(err => winston.error('Program crashed on connecting to database!', err))
 
-// console.log(config.get('mailserver.password'));
-
 const port = process.env.PORT || 5000;
-
 app.listen(port, () => {
     winston.info(`${port} - portni eshitayapman...`);
 });
