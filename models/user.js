@@ -44,6 +44,5 @@ function validateUser(user){
 	return userSchema.validate(user);
 }
 
-
 exports.User = User; 
 exports.validate = validateUser;
