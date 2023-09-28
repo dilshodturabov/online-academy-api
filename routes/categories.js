@@ -7,10 +7,10 @@ const admin = require('../middleware/admin');
 const ERROR_MESSAGE = 'Berilgan IDga teng bo`lgan kategoriya topilmadi!'
 
 router.get('/', async (req,res)=>{
-    throw new Error('Toifalarni olishda kutilmagan xato yuz berdi');
+    // throw new Error('Toifalarni olishda kutilmagan xato yuz berdi');
     const category = await Category.find();
     console.log(category);
-    res.send(category);
+    res.send(category).status(200);
 });
 
 router.post('/', auth, async (req,res)=>{

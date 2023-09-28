@@ -20,29 +20,29 @@ const userSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 		minlength: 5,
-		maxlength: 250,	
+		maxlength: 250,
 		unique: true
 	},
 	isAdmin: Boolean
 });
 
-userSchema.methods.generateAuthToken = function(){
-	 	const token = jwt.sign({_id: this.id, isAdmin: this.isAdmin}, config.get('jwtPrivateKey'));
-	 	return token;
+userSchema.methods.generateAuthToken = function () {
+	const token = jwt.sign({ _id: this.id, isAdmin: this.isAdmin }, config.get('jwtPrivateKey'));
+	return token;
 }
 
 const User = mongoose.model('User', userSchema);
 
-function validateUser(user){
+function validateUser(user) {
 	const userSchema = Joi.object({
 		name: Joi.string().min(3).max(50).required(),
 		password: Joi.string().min(3).max(50).required(),
-    	email: Joi.string().email().required(),
+		email: Joi.string().email().required(),
 		isAdmin: Joi.boolean().required()
 	})
 
 	return userSchema.validate(user);
 }
 
-exports.User = User; 
+exports.User = User;
 exports.validate = validateUser;
