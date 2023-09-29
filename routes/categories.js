@@ -9,7 +9,6 @@ const ERROR_MESSAGE = 'Berilgan IDga teng bo`lgan kategoriya topilmadi!'
 router.get('/', async (req,res)=>{
     // throw new Error('Toifalarni olishda kutilmagan xato yuz berdi');
     const category = await Category.find();
-    console.log(category);
     res.send(category).status(200);
 });
 

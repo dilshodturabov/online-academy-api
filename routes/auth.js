@@ -14,12 +14,10 @@ router.post('/', async (req, res) => {
         return res.status(400).send('Email yoki parol noto\'g\'ri');
 
     const isValidPassword = await bcrypt.compare(req.body.password, user.password);
-        if (!isValidPassword)
-            return res.status(400).send('Email yoki parol noto\'g\'ri');
-
+    if (!isValidPassword)
+        return res.status(400).send('Email yoki parol noto\'g\'ri');
 
     const token = user.generateAuthToken();
-
     return res.header('x-auth-token', token).send(true);
 });
 
