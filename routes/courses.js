@@ -10,7 +10,7 @@ const ERROR_MESSAGE_C = "Berilgan IDga teng bo`lgan toifa topilmadi!";
 router.get('/', async (req, res)=>{ 
 	const courses = await Course.find().sort('title');
 
-	res.send(courses);
+	res.status(200).send(courses);
 });
 
 router.get('/:Id', async (req,res)=>{
