@@ -64,7 +64,7 @@ router.delete('/:Id', [auth, admin], async (req, res) => {
         return res.status(404).send(ERROR_MESSAGE);
 
     console.log("deleted category", category);
-    res.send(category);
+    res.status(200).send(category);
 });
 
 module.exports = router;
